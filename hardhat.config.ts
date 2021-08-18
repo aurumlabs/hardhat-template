@@ -14,6 +14,7 @@ import "@nomiclabs/hardhat-waffle";
 
 import "hardhat-gas-reporter";
 import "@nomiclabs/hardhat-etherscan";
+import "solidity-coverage";
 
 const chainIds = {
   ganache: 1337,
@@ -71,16 +72,22 @@ const config: HardhatUserConfig = {
     kovan: createTestnetConfig("kovan"),
     rinkeby: createTestnetConfig("rinkeby"),
     ropsten: createTestnetConfig("ropsten"),
+    coverage: {
+      url: "http://127.0.0.1:9999", // Coverage launches its own ganache-cli client
+    },
   },
   solidity: {
-    compilers: [
-      {
-        version: "0.7.6",
-      },
-      {
-        version: "0.7.6",
-      },
-    ],
+    compilers: [{
+      version: "0.7.6",
+      settings: {
+        // Disable the optimizer when debugging
+        // https://hardhat.org/hardhat-network/#solidity-optimizer-support
+        optimizer: {
+          enabled: true,
+          runs: 800,
+        }
+      }
+    }],
   },
   etherscan: {
     apiKey: ETHERSCAN_API_KEY,
